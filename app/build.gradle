@@ -1,0 +1,113 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'com.google.gms.google-services'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion '30.0.3'
+
+    defaultConfig {
+        applicationId "org.sean.mlbook"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 19
+        versionName "1.0.1"
+
+        buildConfigField("boolean", "isNoAd", "false")
+
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+    //配置keystore签名
+    signingConfigs {
+        release {
+            storeFile file("../key/sign")
+            storePassword "xi"
+            keyAlias "sigl"
+            keyPassword "xil"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            buildConfigField "boolean", "IS_RELEASE", "true"
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release
+            buildConfigField "boolean", "IS_RELEASE", "false"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.config
+        }
+    }
+}
+
+
+dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    testImplementation 'junit:junit:4.13.2'
+    //noinspection GradleCompatible
+    api 'com.android.support:appcompat-v7:28.0.0'
+    //noinspection GradleCompatible
+    api 'com.android.support:design:28.0.0'
+    //noinspection GradleCompatible
+    api 'com.android.support:cardview-v7:28.0.0'
+    //noinspection GradleCompatible
+    api 'com.android.support:support-compat:28.0.0'
+    api project(':basemvplib')
+    //GreenDao
+    api 'org.greenrobot:greendao:3.3.0'
+    api 'org.greenrobot:greendao-generator:3.3.0'
+    //JSOUP
+    api 'org.jsoup:jsoup:1.12.1'
+    //ProgressBar
+    api 'com.zhangmonke:MProgressBar:1.0.1'
+    //Glide
+    api 'com.github.bumptech.glide:glide:3.7.0'
+    //AutofitTextView
+    api 'me.grantland:autofittextview:0.2.1'
+    //删除粒子效果
+    api 'tyrantgit:explosionfield:1.0.1'
+    //View简易动画
+    api 'com.daimajia.easing:library:2.0@aar'
+    api 'com.daimajia.androidanimations:library:2.2@aar'
+    //CircleImageView
+    api 'de.hdodenhof:circleimageview:2.1.0'
+    //SwitchButton
+    api 'com.kyleduo.switchbutton:library:1.4.4'
+    api 'com.victor:lib:1.0.4'
+    api files('libs/commons-codec-1.10-sources.jar')
+    api files('libs/juniversalchardet-1.0.3.jar')
+    api files('libs/utdid4all-1.0.4.jar')
+
+
+    implementation 'com.google.android.gms:play-services-ads:20.3.0'
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+
+    implementation "com.android.billingclient:billing:4.0.0"
+
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime:2.3.1"
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.3.1"
+
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:28.4.0')
+
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+
+    // Declare the dependency for the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics'
+}
+
+greendao {
+    schemaVersion 1
+    daoPackage 'org.sean.mlbook.dao'
+    targetGenDir 'src/main/java'
+}
